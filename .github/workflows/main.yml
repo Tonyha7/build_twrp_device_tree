@@ -1,0 +1,52 @@
+name: Gen
+
+on:
+  workflow_dispatch:
+    inputs:
+      IMG:
+        description: 'IMG直链'
+        required: true
+        default: ''
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out
+        uses: actions/checkout@v3
+
+      - name: 准备环境
+        run: |
+          sudo apt update
+          sudo apt -y install cpio wget
+
+      - name: 准备Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          
+      - name: 准备twrpdtgen
+        run: pip install -r requirements.txt
+        
+      - name: 下载
+        run: wget ${{ github.event.inputs.IMG }}
+        
+      - name: Start build
+        run: |
+          mkdir dt
+          python3 -m twrpdtgen -o dt/ *.img
+          
+      - name: ZIP device tree
+        run: |
+          zip -r DeviceTree.zip ./dt/*
+          
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./DeviceTree.zip
+          name: TWRP_Device_Tree-${{ github.run_id }}
+          tag_name: ${{ github.run_id }}
+          body: DeviceTree for twrp
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
