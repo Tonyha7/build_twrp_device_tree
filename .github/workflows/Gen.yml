@@ -1,8 +1,12 @@
-name: Gen
+name: 生成TWRP设备树
 
 on:
   workflow_dispatch:
     inputs:
+      PY:
+        description: 'Python3版本（推荐3.6/3.9）'
+        required: true
+        default: '3.9'
       IMG:
         description: 'IMG直链'
         required: true
@@ -22,7 +26,7 @@ jobs:
       - name: 准备Python3
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: ${{ github.event.inputs.PY }}
           cache: 'pip'
           
       - name: 准备twrpdtgen
