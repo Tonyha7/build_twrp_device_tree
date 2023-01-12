@@ -42,13 +42,14 @@ jobs:
           
       - name: ZIP device tree
         run: |
-          zip -r -9 DeviceTree.zip ./out/*
+          cd ./out
+          zip -9 DeviceTree.zip .
           
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./DeviceTree.zip
+            ./out/DeviceTree.zip
           name: TWRP_Device_Tree-${{ github.run_id }}
           tag_name: ${{ github.run_id }}
           body: DeviceTree for twrp
