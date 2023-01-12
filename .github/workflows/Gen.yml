@@ -40,18 +40,18 @@ jobs:
           mkdir out
           python3 -m twrpdtgen -o ./out/ *.img
           
-      - name: ZIP device tree
+      - name: 打压缩包
         run: |
           cd ./out
           zip -9 DeviceTree.zip .
           
-      - name: Upload to Release
+      - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             ./out/DeviceTree.zip
           name: TWRP_Device_Tree-${{ github.run_id }}
           tag_name: ${{ github.run_id }}
-          body: DeviceTree for twrp
+          body: DeviceTree 4 TWRP
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
