@@ -43,7 +43,7 @@ jobs:
       - name: 打压缩包
         run: |
           cd ./out
-          zip -9 DeviceTree.zip ./*
+          zip -r -9 DeviceTree.zip ./*
           
       - name: Release
         uses: softprops/action-gh-release@v1
